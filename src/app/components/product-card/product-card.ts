@@ -1,7 +1,8 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { Product } from '../../models/product';
 import { MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
+import { EcommerceStore } from '../../../ecommerce-store';
 
 @Component({
   selector: 'app-product-card',
@@ -13,5 +14,5 @@ export class ProductCard {
 
   product = input.required<Product>();
 
-  addToCartClicked = output<Product>();
+  store = inject(EcommerceStore);
 }
