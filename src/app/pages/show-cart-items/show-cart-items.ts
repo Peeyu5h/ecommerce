@@ -1,5 +1,5 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { CartItems } from '../../models/cart';
+import { CartItem } from '../../models/cart';
 import { QtySelector } from "../../components/qty-selector/qty-selector";
 import { EcommerceStore } from '../../../ecommerce-store';
 import { MatIconButton } from "@angular/material/button";
@@ -13,7 +13,7 @@ import { MatIcon } from "@angular/material/icon";
 })
 export class ShowCartItems {
 
-  item = input<CartItems>();
+  item = input<CartItem>();
   store = inject(EcommerceStore);
 
   total = computed(() => {

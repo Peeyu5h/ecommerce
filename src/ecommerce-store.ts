@@ -3,14 +3,14 @@ import { Product } from "./app/models/product";
 import { patchState, signalMethod, signalStore, withComputed, withMethods, withState} from "@ngrx/signals";
 import { produce } from "immer";
 import { Toaster } from "./app/services/toaster";
-import { CartItems } from "./app/models/cart";
+import { CartItem } from "./app/models/cart";
 
 
 export type EcommerceState = {
     products: Product[];
     category: string;
     wishListItems: Product[];
-    cartItems: CartItems[];
+    cartItems: CartItem[];
 }
 
 export const EcommerceStore = signalStore(
@@ -288,6 +288,40 @@ export const EcommerceStore = signalStore(
         },
         clearWishList: () => {
           patchState(store, { wishListItems: [] })
+        },
+        setItemQuantity(params: { productId: string, quantity: number}) {
+          const index = store.cartItems().findIndex(c => c.product.id === params.productId)
+          const updated = produce(store.cartItems(), (draft) => {
+            draft[index].quantity = params.quantity
+          });
+
+          patchState(store, {cartItems: updated});
+        },
+        addAllWishListToCart: () => {
+          const updatedCartItems = produce(store.cartItems(), (draft) => {
+            store.wishListItems().forEach(p => {
+              if(!draft.find(c => c.product.id === p.id)) {
+                draft.push({ product: p, quantity: 1});
+              }
+            })
+          })
+          patchState(store, { cartItems: updatedCartItems, wishListItems: []});
+        },
+        moveToWishList: (product: Product) => {
+          const updatedCartItems = store.cartItems().filter((p => p.product.id !== product.id))
+          const updatedWishListItems = produce(store.wishListItems(), (draft) => {
+            if(!draft.find(p => p.id === product.id)){
+              draft.push(product)
+            }
+          })
+          patchState(store, { cartItems: updatedCartItems , wishListItems: updatedWishListItems});
+        },
+
+        removeFromCart: (product: Product) => {
+          patchState(store, {
+            cartItems: store.cartItems().filter((c) => c.product.id !== product.id),
+
+          })
         }
     }))
 )
