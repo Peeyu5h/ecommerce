@@ -13,7 +13,7 @@ import { MatIcon } from "@angular/material/icon";
 })
 export class ShowCartItems {
 
-  item = input<CartItem>();
+  item = input.required<CartItem>();
   store = inject(EcommerceStore);
 
   total = computed(() => {
