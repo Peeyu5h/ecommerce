@@ -4,6 +4,12 @@ import { patchState, signalMethod, signalStore, withComputed, withMethods, withS
 import { produce } from "immer";
 import { Toaster } from "./app/services/toaster";
 import { CartItem } from "./app/models/cart";
+import { MatDialog } from "@angular/material/dialog";
+import { SignInDialog } from "./app/components/sign-in-dialog/sign-in-dialog";
+import { SignInParams, SignUpParams, User } from "./app/models/user";
+import { Router } from "@angular/router";
+import { Order } from "./app/models/order";
+import { withStorageSync } from "@angular-architects/ngrx-toolkit";
 
 
 export type EcommerceState = {
@@ -11,6 +17,8 @@ export type EcommerceState = {
     category: string;
     wishListItems: Product[];
     cartItems: CartItem[];
+    user: User | undefined;
+    loading: boolean;
 }
 
 export const EcommerceStore = signalStore(
@@ -241,8 +249,13 @@ export const EcommerceStore = signalStore(
           ],
         category: 'all',
         wishListItems: [],
-        cartItems: []
+        cartItems: [],
+        user: undefined,
+        loading: false
     } as EcommerceState),
+    withStorageSync({
+      key: 'moder-store', select: ({wishListItems, cartItems, user}) => ({ wishListItems, cartItems, user })
+    }),
     withComputed(({ category, products, wishListItems, cartItems }) => ({
         filteredProducts: computed(() => {
             if(category() === 'all') return products();
@@ -251,7 +264,7 @@ export const EcommerceStore = signalStore(
         wishListCount: computed(() => wishListItems().length),
         cartCount: computed(() => cartItems().length)
     })),
-    withMethods((store, toaster = inject(Toaster)) => ({
+    withMethods((store, toaster = inject(Toaster), matDialog = inject(MatDialog), router = inject(Router)) => ({
         setCategory: signalMethod<string>((category: string) => {
             patchState(store, { category });
         }),
@@ -322,6 +335,80 @@ export const EcommerceStore = signalStore(
             cartItems: store.cartItems().filter((c) => c.product.id !== product.id),
 
           })
+        },
+
+        proceedToCheckout: () => {
+          if(!store.user()){
+            matDialog.open(SignInDialog, {
+              disableClose : true,
+              data: {
+                checkout: true
+              }
+            });
+            return;
+          }
+          router.navigate(['/checkout'])
+        },
+
+        placeOrder: async () => {
+          patchState(store, {loading: true});
+
+          const user = store.user();
+
+          if(!user) {
+            toaster.error('Please login before placing order');
+            patchState(store, {loading: false})
+            return;
+          }
+
+          const order: Order = {
+            id: crypto.randomUUID(),
+            userId: user.id,
+            total: Math.round(store.cartItems().reduce((acc, item) => acc + item.quantity * item.product.price, 0)),
+            items: store.cartItems(),
+            paymentStatus: 'success'
+          };
+
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
+          patchState(store, {loading: false, cartItems: []});
+          router.navigate(['order-success']);
+        },
+
+        signIn: ({email, password, checkout, dialogId}: SignInParams) => {
+          patchState(store, {
+            user: {
+              id: '1',
+              email,
+              name: 'Jhon Doe',
+              imageUrl: 'https://randomuser.me/api/portraits/men/3.jpg'
+            },
+          });
+
+          matDialog.getDialogById(dialogId)?.close()
+          if(checkout){
+            router.navigate(['/checkout']);
+          }
+        },
+
+        signUp: ({email, password, name, checkout, dialogId}: SignUpParams) => {
+          patchState(store, {
+            user: {
+              id: '1',
+              email,
+              name: 'Jhon Doe',
+              imageUrl: 'https://randomuser.me/api/portraits/men/3.jpg'
+            },
+          });
+
+          matDialog.getDialogById(dialogId)?.close()
+          if(checkout){
+            router.navigate(['/checkout']);
+          }
+        },
+
+        signOut: () => {
+          patchState(store, {user: undefined})
         }
     }))
 )

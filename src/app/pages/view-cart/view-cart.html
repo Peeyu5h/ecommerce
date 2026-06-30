@@ -9,7 +9,13 @@
             <app-list-cart-items/>
         </div>
         <div>
-            <app-summarize-order/>
+            <app-summarize-order>
+                <ng-container actionButtons>
+                    <button class="w-full mt-6 py-3" matButton="filled" (click)="store.proceedToCheckout()">
+                        Proceed to Checkout
+                    </button>
+                </ng-container>
+            </app-summarize-order>
         </div>
     </div>
 </div>
