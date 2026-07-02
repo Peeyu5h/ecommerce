@@ -14,7 +14,9 @@
         <p class="text-sm text-gray-600 mb-4 flex-1 leading-relaxed">
             {{ product().description }}
         </p>
-
+        <app-star-rating [rating]="product().rating" class="mb-3">
+            ({{ product().reviewCount }})
+        </app-star-rating>
         <div class="text-sm font-medium mb-4">
             {{ product().inStock ? 'In stock' :  'Out of stock'}}
         </div>
