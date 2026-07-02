@@ -20,7 +20,10 @@
             <div class="responsive-grid">
                 @for (product of store.filteredProducts(); track product.id) {
                     <app-product-card [product]="product">
-                       <app-toggle-wishlist-button class="!absolute z-10 top-3 right-3 w-10 h-10 rounded-md !bg-white border-0 shadow-md flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-lg" [product]="product"/>
+                       <app-toggle-wishlist-button 
+                       class="!absolute z-10 top-3 right-3 w-10 h-10 rounded-md !bg-white border-0 shadow-md flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-110 hover:shadow-lg"
+                       [product]="product"
+                       [style.view-transition-name]="'wishlist-button-' + product.id" />
                     </app-product-card>
                 }
             </div>
