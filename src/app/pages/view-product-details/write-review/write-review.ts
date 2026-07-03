@@ -7,6 +7,7 @@ import { OptionItem } from '../../../models/option-item';
 import { EcommerceStore } from '../../../../ecommerce-store';
 import { MatButton } from "@angular/material/button";
 import { MatOption, MatSelect } from "@angular/material/select";
+import { AddReviewParams } from '../../../models/user-review';
 
 @Component({
   selector: 'app-write-review',
@@ -36,7 +37,13 @@ export class WriteReview {
   });
 
   saveReview(){
+    if(!this.reviewForm.valid){
+      this.reviewForm.markAllAsTouched();
+      return;
+    }
 
+    const {title, comment, rating} = this.reviewForm.value;
+    this.store.addReview({ title, comment, rating } as unknown as AddReviewParams);
   }
 
 }
