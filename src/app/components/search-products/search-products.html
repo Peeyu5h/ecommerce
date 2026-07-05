@@ -1,0 +1,6 @@
+<div class="w-150 flex items-center bg-white border border-gray-200 rounded-lg px-4 py-2 shadow-sm focus-within:ring-2 focus-within:ring-blue-200">
+    <mat-icon matPrefix>search </mat-icon>
+    <input type="text" placeholder="Search Products..." 
+        class="flex-1 ml-2 bg-transparent outline-none text-gray-700 text-sm placeholder:text-gray-400"
+        matInput [(ngModel)]="searchInput" (keyup.enter)="store.setSearchInput(searchInput)" />
+</div>

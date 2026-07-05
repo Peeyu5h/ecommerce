@@ -1,4 +1,4 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { Product } from '../../models/product';
 import { MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";

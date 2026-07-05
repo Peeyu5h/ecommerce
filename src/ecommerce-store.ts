@@ -7,7 +7,7 @@ import { CartItem } from "./app/models/cart";
 import { MatDialog } from "@angular/material/dialog";
 import { SignInDialog } from "./app/components/sign-in-dialog/sign-in-dialog";
 import { SignInParams, SignUpParams, User } from "./app/models/user";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Order } from "./app/models/order";
 import { withStorageSync } from "@angular-architects/ngrx-toolkit";
 import { AddReviewParams, UserReview } from "./app/models/user-review";
@@ -22,6 +22,7 @@ export type EcommerceState = {
     loading: boolean;
     selectedProductId: string | undefined;
     writeReview: boolean;
+    searchInput: string;
 }
 
 export const EcommerceStore = signalStore(
@@ -326,29 +327,56 @@ export const EcommerceStore = signalStore(
         user: undefined,
         loading: false,
         selectedProductId: undefined,
-        writeReview: false
+        writeReview: false,
+        searchInput: ''
     } as EcommerceState),
 
     withStorageSync({
       key: 'moder-store', select: ({wishListItems, cartItems, user}) => ({ wishListItems, cartItems, user })
     }),
 
-    withComputed(({ category, products, wishListItems, cartItems, selectedProductId }) => ({
+    withComputed(({ category, products, wishListItems, cartItems, selectedProductId, searchInput }) => ({
         filteredProducts: computed(() => {
-            if(category() === 'all') return products();
-            return products().filter(p => p.category.toLowerCase() === category().toLowerCase())
+            let result = products();
+
+            if (category() !== 'all') {
+                result = result.filter(p => p.category.toLowerCase() === category().toLowerCase());
+            }
+
+            const search = searchInput()?.trim().toLowerCase();
+            if (search) {
+                result = result.filter(p =>
+                    p.name.toLowerCase().includes(search) ||
+                    p.description.toLowerCase().includes(search)
+                );
+            }
+            return result;
         }),
         wishListCount: computed(() => wishListItems().length),
         cartCount: computed(() => cartItems().length),
         selectedProduct: computed(() => products().find((p) => p.id === selectedProductId()))
     })),
 
-    withMethods((store, toaster = inject(Toaster), matDialog = inject(MatDialog), router = inject(Router)) => ({
+    withMethods((store, toaster = inject(Toaster), matDialog = inject(MatDialog), router = inject(Router), route = inject(ActivatedRoute)) => ({
         setCategory: signalMethod<string>((category: string) => {
             patchState(store, { category });
+
+            router.navigate([`/products/${category}`], {
+              queryParams: { search: store.searchInput() || null},
+              queryParamsHandling: 'merge'
+            })
         }),
         setProductId: signalMethod<string>((productId: string) => {
           patchState(store, {selectedProductId: productId});
+        }),
+        setSearchInput: signalMethod<string>((searchInput: string) => {
+          patchState(store, { searchInput });
+          router.navigate([], {
+            relativeTo: route,
+            queryParams: {search: searchInput || null },
+            queryParamsHandling: 'merge',
+            replaceUrl: true
+          })
         }),
         addToWishList: (product: Product)=>{
             const updatedWishListItems = produce( store.wishListItems(), (draft:any) => {
@@ -533,7 +561,6 @@ export const EcommerceStore = signalStore(
           patchState(store, {loading: false, products: updatedProducts, writeReview: false});
 
         },
-
         
     }))
 )

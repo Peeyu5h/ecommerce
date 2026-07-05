@@ -16,7 +16,6 @@ import { ToggleWishlistButton } from "../../components/toggle-wishlist-button/to
     MatNavList,
     MatListItem,
     MatListItemTitle,
-    RouterLink,
     TitleCasePipe, ToggleWishlistButton],
   templateUrl: './products-grid.html',
   styleUrl: './products-grid.scss',
