@@ -23,6 +23,7 @@ export type EcommerceState = {
     selectedProductId: string | undefined;
     writeReview: boolean;
     searchInput: string;
+    toggleSideNav: boolean;
 }
 
 export const EcommerceStore = signalStore(
@@ -328,7 +329,8 @@ export const EcommerceStore = signalStore(
         loading: false,
         selectedProductId: undefined,
         writeReview: false,
-        searchInput: ''
+        searchInput: '',
+        toggleSideNav: false
     } as EcommerceState),
 
     withStorageSync({
@@ -527,6 +529,10 @@ export const EcommerceStore = signalStore(
 
         hideWriteReview: () => {
           patchState(store, {writeReview: false})
+        },
+
+        toggleSideNavbar: () => {
+          patchState(store, {toggleSideNav: !store.toggleSideNav()})
         },
 
         addReview: async ({ title, comment, rating }: AddReviewParams) => {

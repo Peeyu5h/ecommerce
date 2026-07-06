@@ -1,5 +1,5 @@
 <mat-sidenav-container class="h-full">
-    <mat-sidenav mode="side" opened="true">
+    <mat-sidenav mode="side" [opened]="store.toggleSideNav()">
         <div class="p-6">
             <h2 class="text-lg text-gray-900">Category</h2>
             <mat-nav-list>

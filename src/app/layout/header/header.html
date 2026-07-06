@@ -1,6 +1,11 @@
 <mat-toolbar class="w-full elevated py-2">
     <div class="max-w-[1200px] mx-auto w-full flex justify-between items-center">
-        <span>Modern store</span>
+        <div class="flex items-center gap-2">   
+            <button matIconButton (click)="store.toggleSideNavbar()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span>Modern store</span>
+        </div>
         <app-search-products />
         <app-header-actions/>
     </div>
