@@ -37,11 +37,11 @@ export const EcommerceStore = signalStore(
             name: "Minimalist Desk Lamp",
             description: "A sleek, energy-efficient LED lamp perfect for modern workspaces.",
             price: 45.99,
-            imageUrl: "https://fastly.picsum.photos/id/1/5000/3333.jpg?hmac=Asv2DU3rA_5D1xSe22xZK47WEAN0wjWeFOhzd13ujW4",
+            imageUrl: "https://images.unsplash.com/photo-1753932847231-7949af383b98?q=80&w=800",
             rating: 4.8,
             reviewCount: 1,
             inStock: true,
-            category: "Home Office",
+            category: "Home",
             reviews: [
               {
                 id: "r1",
@@ -64,7 +64,7 @@ export const EcommerceStore = signalStore(
             rating: 4.0,
             reviewCount: 1,
             inStock: true,
-            category: "Furniture",
+            category: "home",
             reviews: [
               {
                 id: "r6",
@@ -132,7 +132,7 @@ export const EcommerceStore = signalStore(
             rating: 3,
             reviewCount: 1,
             inStock: true,
-            category: "Apparel",
+            category: "Clothing",
             reviews: [
               {
                 id: "r4",
@@ -155,7 +155,7 @@ export const EcommerceStore = signalStore(
             rating: 5,
             reviewCount: 1,
             inStock: true,
-            category: "Kitchen",
+            category: "Home",
             reviews: [
               {
                 id: "r9",
@@ -178,7 +178,7 @@ export const EcommerceStore = signalStore(
             rating: 5,
             reviewCount: 1,
             inStock: true,
-            category: "Footwear",
+            category: "Clothing",
             reviews: [
               {
                 id: "r7",
@@ -220,11 +220,11 @@ export const EcommerceStore = signalStore(
             name: "Leather Journal",
             description: "Premium refillable journal.",
             price: 35.00,
-            imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&q=80",
+            imageUrl: "https://plus.unsplash.com/premium_photo-1726729358231-aab9a3adf644?q=80&w=800",
             rating: 4,
             reviewCount: 1,
             inStock: true,
-            category: "Stationery",
+            category: "Accessories",
             reviews: [
               {
                 id: "r10",
@@ -282,7 +282,7 @@ export const EcommerceStore = signalStore(
             rating: 0,
             reviewCount: 0,
             inStock: true,
-            category: "Kitchen",
+            category: "Home",
             reviews: []
           },
           {
@@ -294,7 +294,7 @@ export const EcommerceStore = signalStore(
             rating: 0,
             reviewCount: 0,
             inStock: true,
-            category: "Fitness",
+            category: "Home",
             reviews: []
           },
           {
@@ -306,7 +306,7 @@ export const EcommerceStore = signalStore(
             rating: 0,
             reviewCount: 0,
             inStock: true,
-            category: "Kitchen",
+            category: "Electronics",
             reviews: []
           },
           {
@@ -373,11 +373,9 @@ export const EcommerceStore = signalStore(
         }),
         setSearchInput: signalMethod<string>((searchInput: string) => {
           patchState(store, { searchInput });
-          router.navigate([], {
-            relativeTo: route,
+          router.navigate([`/products/${store.category()}`], {
             queryParams: {search: searchInput || null },
-            queryParamsHandling: 'merge',
-            replaceUrl: true
+            queryParamsHandling: 'merge'
           })
         }),
         addToWishList: (product: Product)=>{
