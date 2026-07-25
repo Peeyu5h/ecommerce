@@ -1,5 +1,5 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { EcommerceStore } from '../../../ecommerce-store';
+import { EcommerceStore } from '../../../store/ecommerce-store';
 import { BackButton } from "../../components/back-button/back-button";
 import { ProductInfo } from "./product-info/product-info";
 import { ViewReviews } from "./view-reviews/view-reviews";

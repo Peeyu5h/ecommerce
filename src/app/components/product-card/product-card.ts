@@ -2,9 +2,9 @@ import { Component, inject, input } from '@angular/core';
 import { Product } from '../../models/product';
 import { MatButton } from "@angular/material/button";
 import { MatIcon } from "@angular/material/icon";
-import { EcommerceStore } from '../../../ecommerce-store';
 import { RouterLink } from "@angular/router";
 import { StarRating } from "../star-rating/star-rating";
+import { EcommerceStore } from '../../../store/ecommerce-store';
 
 @Component({
   selector: 'app-product-card',

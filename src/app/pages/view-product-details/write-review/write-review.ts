@@ -4,7 +4,7 @@ import { MatFormField, MatLabel } from "@angular/material/form-field";
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatInput } from "@angular/material/input";
 import { OptionItem } from '../../../models/option-item';
-import { EcommerceStore } from '../../../../ecommerce-store';
+import { EcommerceStore } from '../../../../store/ecommerce-store';
 import { MatButton } from "@angular/material/button";
 import { MatOption, MatSelect } from "@angular/material/select";
 import { AddReviewParams } from '../../../models/user-review';

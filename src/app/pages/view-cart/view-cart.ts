@@ -4,7 +4,7 @@ import { ListCartItems } from "./list-cart-items/list-cart-items";
 import { TeaseWishlist } from "./tease-wishlist/tease-wishlist";
 import { SummarizeOrder } from "../../components/summarize-order/summarize-order";
 import { MatButton } from "@angular/material/button";
-import { EcommerceStore } from '../../../ecommerce-store';
+import { EcommerceStore } from '../../../store/ecommerce-store';
 
 @Component({
   selector: 'app-view-cart',

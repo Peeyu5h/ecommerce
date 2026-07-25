@@ -5,9 +5,9 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogClose, MatDialogRef } from "@angul
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormField, MatPrefix, MatSuffix } from "@angular/material/form-field";
 import { MatInput } from "@angular/material/input";
-import { EcommerceStore } from '../../../ecommerce-store';
 import { SignInParams } from '../../models/user';
 import { SignUpDialog } from '../sign-up-dialog/sign-up-dialog';
+import { EcommerceStore } from '../../../store/ecommerce-store';
 
 @Component({
   selector: 'app-sign-in-dialog',
@@ -38,7 +38,9 @@ export class SignInDialog {
     }
 
     const { email, password } = this.signInForm.value;
+    // this.store.signIn({ email, password, checkout: this.data?.checkout, dialogId: this.dialogRef.id } as SignInParams);
     this.store.signIn({ email, password, checkout: this.data?.checkout, dialogId: this.dialogRef.id } as SignInParams);
+
   }
 
   openSignUpDialog(){

@@ -3,7 +3,7 @@ import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from "@angular/router";
 import { MatBadge } from "@angular/material/badge";
-import { EcommerceStore } from '../../../ecommerce-store';
+import { EcommerceStore } from '../../../store/ecommerce-store';
 import { MatMenuTrigger, MatMenu, MatMenuItem } from '@angular/material/menu'
 import { MatDivider } from "@angular/material/divider";
 import { MatDialog } from '@angular/material/dialog';

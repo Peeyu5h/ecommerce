@@ -5,7 +5,7 @@ import { MatIconButton, MatButton } from "@angular/material/button";
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormField, MatPrefix } from "@angular/material/form-field";
 import { MatInput } from "@angular/material/input";
-import { EcommerceStore } from '../../../ecommerce-store';
+import { EcommerceStore } from '../../../store/ecommerce-store';
 import { DialogRef } from '@angular/cdk/dialog';
 import { SignUpParams } from '../../models/user';
 import { SignInDialog } from '../sign-in-dialog/sign-in-dialog';

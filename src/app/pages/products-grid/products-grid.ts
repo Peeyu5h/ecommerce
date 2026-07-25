@@ -3,7 +3,7 @@ import { ProductCard } from '../../components/product-card/product-card';
 import { MatSidenavContainer, MatSidenavContent, MatSidenav } from '@angular/material/sidenav';
 import { MatNavList, MatListItem, MatListItemTitle } from '@angular/material/list';
 import { TitleCasePipe } from '@angular/common';
-import { EcommerceStore } from '../../../ecommerce-store';
+import { EcommerceStore } from '../../../store/ecommerce-store';
 import { ToggleWishlistButton } from "../../components/toggle-wishlist-button/toggle-wishlist-button";
 
 @Component({

@@ -4,7 +4,7 @@ import { HeaderActions } from "../header-actions/header-actions";
 import { SearchProducts } from "../../components/search-products/search-products";
 import { MatIcon } from "@angular/material/icon";
 import { MatIconButton } from "@angular/material/button";
-import { EcommerceStore } from '../../../ecommerce-store';
+import { EcommerceStore } from '../../../store/ecommerce-store';
 
 @Component({
   selector: 'app-header',

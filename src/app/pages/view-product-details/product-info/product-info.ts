@@ -6,7 +6,7 @@ import { QtySelector } from "../../../components/qty-selector/qty-selector";
 import { MatIcon } from "@angular/material/icon";
 import { ToggleWishlistButton } from "../../../components/toggle-wishlist-button/toggle-wishlist-button";
 import { MatButton, MatIconButton } from "@angular/material/button";
-import { EcommerceStore } from '../../../../ecommerce-store';
+import { EcommerceStore } from '../../../../store/ecommerce-store';
 import { StarRating } from "../../../components/star-rating/star-rating";
 
 @Component({

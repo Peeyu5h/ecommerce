@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { BackButton } from "../../components/back-button/back-button";
-import { EcommerceStore } from '../../../ecommerce-store';
+import { EcommerceStore } from '../../../store/ecommerce-store';
 import { ProductCard } from "../../components/product-card/product-card";
 import { MatIcon } from "@angular/material/icon";
 import { MatIconButton, MatAnchor } from '@angular/material/button';

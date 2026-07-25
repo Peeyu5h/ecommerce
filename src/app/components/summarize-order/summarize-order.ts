@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { ViewPanel } from "../../directives/view-panel";
-import { EcommerceStore } from '../../../ecommerce-store';
+import { EcommerceStore } from '../../../store/ecommerce-store';
 
 @Component({
   selector: 'app-summarize-order',

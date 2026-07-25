@@ -4,7 +4,7 @@ import { ViewPanel } from "../../../directives/view-panel";
 import { RatingSummary } from "../rating-summary/rating-summary";
 import { ViewReviewItem } from "../view-review-item/view-review-item";
 import { MatButton } from "@angular/material/button";
-import { EcommerceStore } from '../../../../ecommerce-store';
+import { EcommerceStore } from '../../../../store/ecommerce-store';
 import { WriteReview } from "../write-review/write-review";
 
 @Component({

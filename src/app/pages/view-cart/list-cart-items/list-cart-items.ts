@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ViewPanel } from "../../../directives/view-panel";
-import { EcommerceStore } from '../../../../ecommerce-store';
+import { EcommerceStore } from '../../../../store/ecommerce-store';
 import { ShowCartItems } from "../../show-cart-items/show-cart-items";
 
 @Component({

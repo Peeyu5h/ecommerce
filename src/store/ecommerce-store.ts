@@ -1,17 +1,18 @@
 import { computed, inject } from "@angular/core";
-import { Product } from "./app/models/product";
+import { Product } from "../app/models/product";
 import { patchState, signalMethod, signalStore, withComputed, withMethods, withState} from "@ngrx/signals";
 import { produce } from "immer";
-import { Toaster } from "./app/services/toaster";
-import { CartItem } from "./app/models/cart";
+import { Toaster } from "../app/services/toaster";
+import { CartItem } from "../app/models/cart";
 import { MatDialog } from "@angular/material/dialog";
-import { SignInDialog } from "./app/components/sign-in-dialog/sign-in-dialog";
-import { LoginPayload, RegisterPayload, SignInParams, SignUpParams, User } from "./app/models/user";
+import { SignInDialog } from "../app/components/sign-in-dialog/sign-in-dialog";
+import { LoginPayload, RegisterPayload, SignInParams, SignUpParams, User } from "../app/models/user";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Order } from "./app/models/order";
+import { Order } from "../app/models/order";
 import { withStorageSync } from "@angular-architects/ngrx-toolkit";
-import { AddReviewParams, UserReview } from "./app/models/user-review";
-import { AuthApi } from "./app/services/auth-api";
+import { AddReviewParams, UserReview } from "../app/models/user-review";
+import { AuthApi } from "../app/services/auth-api";
+import { authMethods } from "./auth-method";
 
 
 export type EcommerceState = {
@@ -493,61 +494,61 @@ export const EcommerceStore = signalStore(
           router.navigate(['order-success']);
         },
 
-        signIn: ({email, password, checkout, dialogId}: SignInParams) => {
-          const payload: LoginPayload = {email, password};
-          authService.login(payload).subscribe({
-            next: (res) =>{
+        // signIn: ({email, password, checkout, dialogId}: SignInParams) => {
+        //   const payload: LoginPayload = {email, password};
+        //   authService.login(payload).subscribe({
+        //     next: (res) =>{
 
-              toaster.success("Logged in Successfully!");
-              localStorage.setItem('token', res.token);
+        //       toaster.success("Logged in Successfully!");
+        //       localStorage.setItem('token', res.token);
 
-              patchState(store,{
-                user: {
-                  id: res.user.id,
-                  email: res.user.email,
-                  name: res.user.name,
-                  imageUrl: 'https://randomuser.me/api/portraits/men/3.jpg'
-                }
-              });
+        //       patchState(store,{
+        //         user: {
+        //           id: res.user.id,
+        //           email: res.user.email,
+        //           name: res.user.name,
+        //           imageUrl: 'https://randomuser.me/api/portraits/men/3.jpg'
+        //         }
+        //       });
 
-              matDialog.getDialogById(dialogId)?.close();
-              if(checkout){
-                router.navigate(['/checkout']);
-              }
-            },
-            error: (err) => {
-              toaster.error("Log In Failed!")
-              console.error(err);
-            }
-          });
-        },
+        //       matDialog.getDialogById(dialogId)?.close();
+        //       if(checkout){
+        //         router.navigate(['/checkout']);
+        //       }
+        //     },
+        //     error: (err) => {
+        //       toaster.error("Log In Failed!")
+        //       console.error(err);
+        //     }
+        //   });
+        // },
 
-        signUp: ({email, password, name, checkout, dialogId}: SignUpParams) => {
-          const payload: RegisterPayload = {name, email, password};
+        // signUp: ({email, password, name, checkout, dialogId}: SignUpParams) => {
+        //   const payload: RegisterPayload = {name, email, password};
 
-          authService.register(payload).subscribe({
-            next:(res) => {
-              toaster.success(res.message);
+        //   authService.register(payload).subscribe({
+        //     next:(res) => {
+        //       toaster.success(res.message);
 
-              patchState(store, {
-                user: {
-                  id: res.user.id,
-                  email: res.user.email,
-                  name: res.user.name,
-                  imageUrl: 'https://randomuser.me/api/portraits/men/3.jpg'
-                }
-              });
-              matDialog.getDialogById(dialogId)?.close();
-              if(checkout){
-                router.navigate(['/checkout']);
-              }
-            },
-            error:(err) => {
-              toaster.error("Registration Failed");
-              console.error(err);
-            }
-          })
-        },
+        //       patchState(store, {
+        //         user: {
+        //           id: res.user.id,
+        //           email: res.user.email,
+        //           name: res.user.name,
+        //           imageUrl: 'https://randomuser.me/api/portraits/men/3.jpg'
+        //         }
+        //       });
+        //       matDialog.getDialogById(dialogId)?.close();
+        //       if(checkout){
+        //         router.navigate(['/checkout']);
+        //       }
+        //     },
+        //     error:(err) => {
+        //       toaster.error("Registration Failed");
+        //       console.error(err);
+        //     }
+        //   })
+        // },
 
         signOut: () => {
           patchState(store, {user: undefined})
@@ -598,5 +599,7 @@ export const EcommerceStore = signalStore(
 
         },
         
-    }))
+    })),
+
+    withMethods(authMethods)
 )

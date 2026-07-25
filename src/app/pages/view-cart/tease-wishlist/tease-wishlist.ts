@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ViewPanel } from "../../../directives/view-panel";
 import { MatIcon } from "@angular/material/icon";
-import { EcommerceStore } from '../../../../ecommerce-store';
+import { EcommerceStore } from '../../../../store/ecommerce-store';
 import { MatButton } from "@angular/material/button";
 import { RouterLink } from "@angular/router";
 

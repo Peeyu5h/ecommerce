@@ -14,3 +14,5 @@ export type SignUpParams = {
 }
 
 export type SignInParams = Omit<SignUpParams, 'name'>;
+export type LoginPayload = Pick<SignUpParams, 'email' | 'password'>;
+export type RegisterPayload = Omit<SignUpParams, 'dialogId'>;
