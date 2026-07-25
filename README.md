@@ -1,4 +1,9 @@
-# Ecommerce
+# Ecommerce Frontend
+
+A modern ecommerce frontend built with Angular.
+
+## 🚀 Live Demo
+https://ecommerce-8bk.pages.dev/
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.0.
 
