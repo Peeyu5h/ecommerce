@@ -1,7 +1,7 @@
 import { inject } from "@angular/core";
 import { CategoryApi } from "../app/services/category-api";
 import { rxMethod } from "@ngrx/signals/rxjs-interop";
-import { pipe, switchMap, tap } from "rxjs";
+import { finalize, pipe, switchMap, tap } from "rxjs";
 import { patchState } from "@ngrx/signals";
 import { tapResponse } from "@ngrx/operators";
 import { Category } from "../app/models/category";
@@ -33,7 +33,8 @@ export function categoryMethods(store: any){
                             error:(err) => {
                                 console.error(err);
                             }
-                        })
+                        }),
+                        finalize(() => patchState(store, { loading: false })),
                     )
                 })
             )

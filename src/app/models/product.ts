@@ -13,3 +13,5 @@ export type Product = {
     category: Category;
     reviews: UserReview[];
 }
+
+export type CartProduct = Pick<Product, 'id' | 'name' | 'price' | 'imageUrl' | 'inStock'>;

@@ -1,7 +1,7 @@
 import { inject } from "@angular/core";
 import { AuthApi } from "../app/services/auth-api";
 import { rxMethod } from "@ngrx/signals/rxjs-interop";
-import { pipe, switchMap, tap } from "rxjs";
+import { finalize, pipe, switchMap, tap } from "rxjs";
 import { patchState } from "@ngrx/signals";
 import { tapResponse } from "@ngrx/operators"
 import { SignInParams, SignUpParams } from "../app/models/user";
@@ -31,11 +31,12 @@ export function authMethods(store: any){
 
                                 patchState(store,{
                                     user: {
-                                    id: res.user.id,
-                                    email: res.user.email,
-                                    name: res.user.name,
-                                    imageUrl: 'https://randomuser.me/api/portraits/men/3.jpg'
-                                    }
+                                        id: res.user.id,
+                                        email: res.user.email,
+                                        name: res.user.name,
+                                        imageUrl: 'https://randomuser.me/api/portraits/men/3.jpg'
+                                        },
+                                    isLoggedIn: true
                                 });
                                 
                                 matDialog.getDialogById(params.dialogId)?.close();
@@ -47,7 +48,8 @@ export function authMethods(store: any){
                                 toaster.error("Log In Failed!")
                                 console.error(err);
                             }
-                        })
+                        }),
+                        finalize(() => patchState(store, { loading: false })),
                     )}
                 )
             )
@@ -83,7 +85,8 @@ export function authMethods(store: any){
                                 toaster.error("Registration Failed!")
                                 console.error(err);
                             }
-                        })
+                        }),
+                        finalize(() => patchState(store, { loading: false })),
                     )}
                 )
             )
