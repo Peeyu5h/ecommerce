@@ -22,4 +22,16 @@ export class AuthApi {
     const url = `${environment.apiUrl}${this.registerUrl}`;
     return this.http.post(url, payload);
   }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  setToken(token: string): void{
+    localStorage.setItem('token', token);
+  }
+
+  clearToken(): void{
+    localStorage.removeItem('token');
+  }
 }

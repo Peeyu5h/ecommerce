@@ -1,3 +1,4 @@
+import { Category } from "./category";
 import { UserReview } from "./user-review";
 
 export type Product = {
@@ -9,6 +10,6 @@ export type Product = {
     rating: number;
     reviewCount: number;
     inStock: boolean;
-    category: string;
+    category: Category;
     reviews: UserReview[];
 }

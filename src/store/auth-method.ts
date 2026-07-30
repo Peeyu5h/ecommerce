@@ -27,7 +27,7 @@ export function authMethods(store: any){
                             next:(res) =>{
 
                                 toaster.success("Logged in Successfully!");
-                                localStorage.setItem('token', res.token);
+                                authService.setToken(res.token);
 
                                 patchState(store,{
                                     user: {
@@ -87,6 +87,11 @@ export function authMethods(store: any){
                     )}
                 )
             )
-        )
+        ),
+
+        signOut: () => {
+        authService.clearToken();
+        patchState(store, {user: undefined})
+        }
     }
 }
