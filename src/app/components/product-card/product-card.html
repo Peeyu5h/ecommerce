@@ -8,23 +8,26 @@
     <ng-content/>
     
     <div class="p-5 flex flex-col flex-1" >
-        <h3 class="text-lg font-semibold text-gray-900 mb-2 leading-tight" [routerLink]="['/product', product().id]">
-            {{ product().name }}
-        </h3>
-        <p class="text-sm text-gray-600 mb-4 flex-1 leading-relaxed">
-            {{ product().description }}
-        </p>
-        <app-star-rating [rating]="product().rating" class="mb-3">
-            ({{ product().reviewCount }})
-        </app-star-rating>
-        <div class="text-sm font-medium mb-4" [class]="product().inStock ? 'text-green-600' : 'danger'">
-            {{ product().inStock ? 'In stock' :  'Out of stock'}}
+        <div [routerLink]="['/product', product().id]">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2 leading-tight" >
+                {{ product().name }}
+            </h3>
+            <p class="text-sm text-gray-600 mb-4 flex-1 leading-relaxed">
+                {{ product().description }}
+            </p>
+            <app-star-rating [rating]="product().rating" class="mb-3">
+                ({{ product().reviewCount }})
+            </app-star-rating>
+            <div class="text-sm font-medium mb-4" [class]="product().inStock ? 'text-green-600' : 'danger'">
+                {{ product().inStock ? 'In stock' :  'Out of stock'}}
+            </div>
         </div>
         <div class="flex items-center justify-between mt-auto">
             <span class="text-2xl font-bold text-gray-900">
                 ₹{{ product().price }}
             </span>
-            <button matButton="filled" class="flex items-center gap-2" (click)="store.addToCart(product())">
+            <button matButton="filled" class="flex items-center gap-2"
+                    [disabled]="!product().inStock" (click)="store.addToCart(product())">
                 <mat-icon>shopping_cart</mat-icon> Add to Cart
             </button>
         </div>

@@ -8,7 +8,7 @@
     </div>
 
     <app-qty-selector [quantity]="item().quantity"
-     (qtyUpdated)="store.setItemQuantity({productId: item().product.id, quantity: $event})"/>
+     (qtyUpdated)="store.setItemQuantity({productId: item().product.id, quantity: $event, cartId: item()._id})"/>
     <div class="flex flex-col items-end">
         <div class="text-right font-semibold text-lg">
             {{ total() }}
@@ -18,7 +18,7 @@
                 <mat-icon>favorite_border</mat-icon>
             </button>
     
-            <button matIconButton class="danger" (click)="store.removeFromCart(item().product)">
+            <button matIconButton class="danger" (click)="store.removeFromCart(item().product, item()._id)">
                 <mat-icon>delete</mat-icon>
             </button>
         </div>

@@ -1,7 +1,7 @@
 import { inject } from "@angular/core"
 import { ProductApi } from "../app/services/product-api"
 import { rxMethod } from "@ngrx/signals/rxjs-interop";
-import { pipe, switchMap, tap } from "rxjs";
+import { finalize, pipe, switchMap, tap } from "rxjs";
 import { patchState } from "@ngrx/signals";
 import { tapResponse } from "@ngrx/operators";
 import { Toaster } from "../app/services/toaster";
@@ -21,11 +21,11 @@ export function productMethods(store: any){
                             next:(res) => {
                                 const productArray = res.allProducts.map((prod: any) => {
                                     return {
-                                        id: prod._id,
+                                        id: prod.id,
                                         name: prod.name,
                                         description: prod.description,
                                         price: prod.price,
-                                        imageUrl: prod.images[0],
+                                        imageUrl: prod.images,
                                         rating: prod.rating,
                                         reviewCount: prod.reviewCount,
                                         inStock: prod.stock > 0 ? true : false,
@@ -39,7 +39,9 @@ export function productMethods(store: any){
                                 toaster.error("Unable to load products")
                                 console.error(err);
                             }
-                        })
+                        }),
+                        
+                        finalize(() => patchState(store, { loading: false })),
                     )
                 })
             )
@@ -58,7 +60,8 @@ export function productMethods(store: any){
                                 toaster.error("Unable to load products details")
                                 console.error(err);
                             }
-                        })
+                        }),
+                        finalize(() => patchState(store, { loading: false })),
                     )
                 })
             )

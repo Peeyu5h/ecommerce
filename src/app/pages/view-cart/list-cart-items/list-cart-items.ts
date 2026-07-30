@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ViewPanel } from "../../../directives/view-panel";
 import { EcommerceStore } from '../../../../store/ecommerce-store';
 import { ShowCartItems } from "../../show-cart-items/show-cart-items";
@@ -9,8 +9,14 @@ import { ShowCartItems } from "../../show-cart-items/show-cart-items";
   templateUrl: './list-cart-items.html',
   styleUrl: './list-cart-items.scss',
 })
-export class ListCartItems {
+export class ListCartItems implements OnInit{
 
-  store = inject(EcommerceStore)
+  store = inject(EcommerceStore);
+
+  ngOnInit(): void{
+    if(this.store.isLoggedIn()){
+      this.store.getCartItems();
+    }
+  }
 
 }

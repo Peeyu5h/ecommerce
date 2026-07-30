@@ -10,5 +10,9 @@ export const API = {
 
     CATEGORY: {
         CATEGORIES: '/categories'
+    },
+
+    CART: {
+        CART: '/cart'
     }
 }

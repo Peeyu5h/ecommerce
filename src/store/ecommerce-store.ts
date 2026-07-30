@@ -1,5 +1,5 @@
 import { computed, inject } from "@angular/core";
-import { Product } from "../app/models/product";
+import { CartProduct, Product } from "../app/models/product";
 import { patchState, signalMethod, signalStore, withComputed, withHooks, withMethods, withState} from "@ngrx/signals";
 import { produce } from "immer";
 import { Toaster } from "../app/services/toaster";
@@ -16,6 +16,7 @@ import { authMethods } from "./auth-method";
 import { productMethods } from "./product-method";
 import { Category } from "../app/models/category";
 import { categoryMethods } from "./category-method";
+import { cartMethods } from "./cart-method";
 
 
 export type EcommerceState = {
@@ -29,7 +30,8 @@ export type EcommerceState = {
     writeReview: boolean;
     searchInput: string;
     toggleSideNav: boolean;
-    categoriesList: Category[]
+    categoriesList: Category[];
+    isLoggedIn: boolean;
 }
 
 export const EcommerceStore = signalStore(
@@ -47,7 +49,8 @@ export const EcommerceStore = signalStore(
         writeReview: false,
         searchInput: '',
         toggleSideNav: false,
-        categoriesList: []
+        categoriesList: [],
+        isLoggedIn: false,
     } as EcommerceState),
 
     withStorageSync({
@@ -75,6 +78,11 @@ export const EcommerceStore = signalStore(
         cartCount: computed(() => cartItems().length),
         selectedProduct: computed(() => products().find((p) => p.id === selectedProductId()))
     })),
+
+    withMethods(authMethods),
+    withMethods(productMethods),
+    withMethods(categoryMethods),
+    withMethods(cartMethods),
 
     withMethods((
         store, toaster = inject(Toaster), 
@@ -114,6 +122,11 @@ export const EcommerceStore = signalStore(
             toaster.success("Product added to wishlist")
         },
         addToCart: (product: Product, quantity = 1)=>{
+          
+          if(store.isLoggedIn()){
+            store.addProductToCart({productId: product.id, quantity});
+            return;
+          }
           const existingItemIndex = store.cartItems().findIndex(i => i.product.id === product.id);
           const updatedCartItems = produce(store.cartItems(), (draft) => {
             if(existingItemIndex !== -1){
@@ -121,13 +134,20 @@ export const EcommerceStore = signalStore(
               return;
             }
 
+            const cartProduct: CartProduct = {
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              imageUrl: product.imageUrl,
+              inStock: product.inStock,
+            }
             draft.push({
-              product, quantity
+              product: cartProduct, quantity
             })
           });
 
           patchState(store, {cartItems: updatedCartItems});
-          toaster.success(existingItemIndex !== -1 ? 'Product added again' : 'Product added to the cart')
+          toaster.success(existingItemIndex !== -1 ? 'Cart updated!' : 'Product added to the cart')
         },
         removeFromWishList: (product: Product)=>{
             patchState(store, {
@@ -138,7 +158,12 @@ export const EcommerceStore = signalStore(
         clearWishList: () => {
           patchState(store, { wishListItems: [] })
         },
-        setItemQuantity(params: { productId: string, quantity: number}) {
+        setItemQuantity(params: { productId: string, quantity: number, cartId: any}) {
+
+          if(store.isLoggedIn()){
+            store.updateCartProduct(params);
+            return;
+          }
           const index = store.cartItems().findIndex(c => c.product.id === params.productId)
           const updated = produce(store.cartItems(), (draft) => {
             draft[index].quantity = params.quantity
@@ -156,7 +181,7 @@ export const EcommerceStore = signalStore(
           })
           patchState(store, { cartItems: updatedCartItems, wishListItems: []});
         },
-        moveToWishList: (product: Product) => {
+        moveToWishList: (product: any) => {
           const updatedCartItems = store.cartItems().filter((p => p.product.id !== product.id))
           const updatedWishListItems = produce(store.wishListItems(), (draft) => {
             if(!draft.find(p => p.id === product.id)){
@@ -166,7 +191,11 @@ export const EcommerceStore = signalStore(
           patchState(store, { cartItems: updatedCartItems , wishListItems: updatedWishListItems});
         },
 
-        removeFromCart: (product: Product) => {
+        removeFromCart: (product: any, cartId: any) => {
+          if(store.isLoggedIn()){
+            store.deleteCartProduct(cartId);
+            return;
+          }
           patchState(store, {
             cartItems: store.cartItems().filter((c) => c.product.id !== product.id),
 
@@ -258,15 +287,10 @@ export const EcommerceStore = signalStore(
         
     })),
 
-    withMethods(authMethods),
-    withMethods(productMethods),
-    withMethods(categoryMethods),
-
     withHooks({
       onInit(store){
         store.getAllProduct();
         store.getCategory();
-        console.log('Ran withHook')
       }
     })
 )

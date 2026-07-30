@@ -1,4 +1,7 @@
 <app-header class="z-10 relative" />
 <div class="h-[calc(100%-64px)] overflow-auto">
+    @if (store.loading()) {
+        <app-loading />
+    }
     <router-outlet/>
 </div>
