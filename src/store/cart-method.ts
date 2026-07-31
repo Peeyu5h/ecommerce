@@ -49,7 +49,16 @@ export function cartMethods(store: any){
                         tapResponse({
                             next: (res) => {
                                 console.log(res.message);
+                                const cartProductList: CartItem = res.cartList.items.map((item:any) => {
+                                    const carItem: CartItem = {
+                                        _id: item._id,
+                                        product: {...item.product, id:item.product._id, imageUrl: item.product.images[0]},
+                                        quantity: item.quantity
+                                    }
+                                    return carItem
+                                });
                                 
+                                patchState(store, {cartItems: cartProductList});
                             },
                             error: (err) => {
                                 console.error(err);
@@ -89,8 +98,16 @@ export function cartMethods(store: any){
                     return cartService.removeCartItem(cartId).pipe(
                         tapResponse({
                             next: (res) => {
-                                console.log(res.message, res.removedCartItem.items);
-                                patchState(store, {cartItems: res.removedCartItem.items})
+                                console.log(res.message, res.cartItemsList.items);
+                                const cartProductList: CartItem = res.cartItemsList.items.map((item:any) => {
+                                    const carItem: CartItem = {
+                                        _id: item._id,
+                                        product: {...item.product, id:item.product._id, imageUrl: item.product.images[0]},
+                                        quantity: item.quantity
+                                    }
+                                    return carItem
+                                });
+                                patchState(store, {cartItems: cartProductList})
                                 toaster.success(res.message);
                             },
                             error: (err:any) => {
