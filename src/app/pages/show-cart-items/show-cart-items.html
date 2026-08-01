@@ -14,7 +14,7 @@
             {{ total() }}
         </div>
         <div class="flex -me-3">
-            <button matIconButton (click)="store.moveToWishList(item().product)">
+            <button matIconButton (click)="store.moveToWishList(item().product, item()._id)">
                 <mat-icon>favorite_border</mat-icon>
             </button>
     

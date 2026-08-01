@@ -14,5 +14,9 @@ export const API = {
 
     CART: {
         CART: '/cart'
+    },
+
+    WISHLIST: {
+        WISHLIST: '/wishlist'
     }
 }

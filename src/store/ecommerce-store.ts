@@ -17,6 +17,7 @@ import { productMethods } from "./product-method";
 import { Category } from "../app/models/category";
 import { categoryMethods } from "./category-method";
 import { cartMethods } from "./cart-method";
+import { wishListMethods } from "./wishList-method";
 
 
 export type EcommerceState = {
@@ -83,6 +84,7 @@ export const EcommerceStore = signalStore(
     withMethods(productMethods),
     withMethods(categoryMethods),
     withMethods(cartMethods),
+    withMethods(wishListMethods),
 
     withMethods((
         store, toaster = inject(Toaster), 
@@ -113,6 +115,10 @@ export const EcommerceStore = signalStore(
           })
         }),
         addToWishList: (product: Product)=>{
+            if(store.isLoggedIn()){
+              store.addProductToWishList({productId: product.id});
+              return;
+            }
             const updatedWishListItems = produce( store.wishListItems(), (draft:any) => {
                 if( !draft.find((p:any) => p.id === product.id)){
                     draft.push(product);
@@ -150,12 +156,20 @@ export const EcommerceStore = signalStore(
           toaster.success(existingItemIndex !== -1 ? 'Cart updated!' : 'Product added to the cart')
         },
         removeFromWishList: (product: Product)=>{
+            if(store.isLoggedIn()){
+              store.removeProductFromWishList({productId: product.id});
+              return;
+            }
             patchState(store, {
                 wishListItems: store.wishListItems().filter((p) => p.id !== product.id),
             });
             toaster.success("Product removed from wishlist");
         },
         clearWishList: () => {
+          if(store.isLoggedIn()){
+            store.deleteWishList();
+            return;
+          }
           patchState(store, { wishListItems: [] })
         },
         setItemQuantity(params: { productId: string, quantity: number, cartId: any}) {
@@ -181,7 +195,12 @@ export const EcommerceStore = signalStore(
           })
           patchState(store, { cartItems: updatedCartItems, wishListItems: []});
         },
-        moveToWishList: (product: any) => {
+        moveToWishList: (product: any, cartId: any) => {
+          if(store.isLoggedIn()){
+            store.addProductToWishList({productId: product.id});
+            store.deleteCartProduct(cartId);
+            return;
+          }
           const updatedCartItems = store.cartItems().filter((p => p.product.id !== product.id))
           const updatedWishListItems = produce(store.wishListItems(), (draft) => {
             if(!draft.find(p => p.id === product.id)){
@@ -295,6 +314,7 @@ export const EcommerceStore = signalStore(
         effect(() => {
           if (store.isLoggedIn()) {
             store.getCartItems();
+            store.getWishListItems();
           }
         });
         
