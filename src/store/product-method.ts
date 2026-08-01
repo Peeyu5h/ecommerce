@@ -29,7 +29,7 @@ export function productMethods(store: any){
                                         rating: prod.rating,
                                         reviewCount: prod.reviewCount,
                                         inStock: prod.stock > 0 ? true : false,
-                                        category: prod?.category || 'all',
+                                        category: { ...prod.category, _id: prod.category.id },
                                         reviews: []
                                     }
                                 });

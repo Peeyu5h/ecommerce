@@ -1,4 +1,4 @@
-import { computed, inject } from "@angular/core";
+import { computed, effect, inject } from "@angular/core";
 import { CartProduct, Product } from "../app/models/product";
 import { patchState, signalMethod, signalStore, withComputed, withHooks, withMethods, withState} from "@ngrx/signals";
 import { produce } from "immer";
@@ -53,9 +53,9 @@ export const EcommerceStore = signalStore(
         isLoggedIn: false,
     } as EcommerceState),
 
-    withStorageSync({
-      key: 'moder-store', select: ({wishListItems, cartItems, user}) => ({ wishListItems, cartItems, user })
-    }),
+    // withStorageSync({
+    //   key: 'moder-store', select: ({wishListItems, cartItems, user}) => ({ wishListItems, cartItems, user })
+    // }),
 
     withComputed(({ category, products, wishListItems, cartItems, selectedProductId, searchInput }) => ({
         filteredProducts: computed(() => {
@@ -291,6 +291,13 @@ export const EcommerceStore = signalStore(
       onInit(store){
         store.getAllProduct();
         store.getCategory();
+
+        effect(() => {
+          if (store.isLoggedIn()) {
+            store.getCartItems();
+          }
+        });
+        
       }
     })
 )

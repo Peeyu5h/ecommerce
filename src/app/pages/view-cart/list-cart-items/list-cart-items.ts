@@ -9,14 +9,9 @@ import { ShowCartItems } from "../../show-cart-items/show-cart-items";
   templateUrl: './list-cart-items.html',
   styleUrl: './list-cart-items.scss',
 })
-export class ListCartItems implements OnInit{
+export class ListCartItems {
 
   store = inject(EcommerceStore);
 
-  ngOnInit(): void{
-    if(this.store.isLoggedIn()){
-      this.store.getCartItems();
-    }
-  }
 
 }

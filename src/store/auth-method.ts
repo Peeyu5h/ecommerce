@@ -94,7 +94,7 @@ export function authMethods(store: any){
 
         signOut: () => {
         authService.clearToken();
-        patchState(store, {user: undefined})
+        patchState(store, {user: undefined, isLoggedIn: false})
         }
     }
 }
