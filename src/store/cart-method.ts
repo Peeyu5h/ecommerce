@@ -78,7 +78,16 @@ export function cartMethods(store: any){
                         tapResponse({
                             next: (res) => {
                                 console.log(res.message);
+                                const cartProductList: CartItem = res.updatedCart.items.map((item:any) => {
+                                    const carItem: CartItem = {
+                                        _id: item._id,
+                                        product: {...item.product, id:item.product._id, imageUrl: item.product.images[0]},
+                                        quantity: item.quantity
+                                    }
+                                    return carItem
+                                });
                                 
+                                patchState(store, {cartItems: cartProductList});
                             },
                             error: (err:any) => {
                                 toaster.error(err.error.error);
