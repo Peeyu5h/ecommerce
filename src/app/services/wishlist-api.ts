@@ -11,6 +11,7 @@ export class WishlistApi {
 
   private http = inject(HttpClient);
   private wishlistUrl = API.WISHLIST.WISHLIST;
+  private movetocartUrl = API.WISHLIST.MOVETOCART;
 
   getWishListItems(): Observable<any>{
     const url = `${environment.apiUrl}${this.wishlistUrl}`;
@@ -31,6 +32,11 @@ export class WishlistApi {
   deleteWishList(): Observable<any>{
     const url = `${environment.apiUrl}${this.wishlistUrl}`;
     return this.http.delete( url );
+  }
+
+  moveAllToCart(): Observable<any>{
+    const url = `${environment.apiUrl}${this.movetocartUrl}`;
+    return this.http.post( url, {} )
   }
   
 }

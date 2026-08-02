@@ -186,6 +186,10 @@ export const EcommerceStore = signalStore(
           patchState(store, {cartItems: updated});
         },
         addAllWishListToCart: () => {
+          if(store.isLoggedIn()){
+            store.moveWishlistToCart();
+            return;
+          }
           const updatedCartItems = produce(store.cartItems(), (draft) => {
             store.wishListItems().forEach(p => {
               if(!draft.find(c => c.product.id === p.id)) {
