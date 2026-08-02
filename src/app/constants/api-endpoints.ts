@@ -17,6 +17,7 @@ export const API = {
     },
 
     WISHLIST: {
-        WISHLIST: '/wishlist'
+        WISHLIST: '/wishlist',
+        MOVETOCART: '/wishlist/move-to-cart'
     }
 }

@@ -112,6 +112,41 @@ export function wishListMethods(store: any){
                     )
                 })
             )
+        ),
+
+        moveWishlistToCart: rxMethod<void>(
+            pipe(
+                tap(() => patchState(store, {loading: true})),
+                switchMap(() => {
+                    return wishlistService.moveAllToCart().pipe(
+                        tapResponse({
+                            next: (res) => {
+                                console.log(res.message);
+                                const updatedCartList = res.cartItems.map((item:any) => {
+                                    return {
+                                        _id: item._id,
+                                        product: {...item.product, id:item.product._id, imageUrl: item.product.images[0]},
+                                        quantity: item.quantity
+                                    }
+                                });
+                                const updateWishList = res.wishlist.map((item: any) => {
+                                    return {
+                                        ...item.product, id: item.product._id, inStock: item.product.stock > 0 ? true:false,
+                                        category: {}, reviews: [], imageUrl: item.product.images[0]
+                                    }
+                                })
+                                
+                                patchState(store, {wishListItems: updateWishList, cartItems: updatedCartList});
+                                toaster.success("Product removed from wishlist")
+                            },
+                            error: (err) => {
+                                console.error(err);
+                            }
+                        }),
+                        finalize(() => patchState(store, { loading: false })),
+                    )
+                })
+            )
         )
     }
 }
