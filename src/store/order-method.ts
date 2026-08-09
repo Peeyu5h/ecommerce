@@ -34,6 +34,36 @@ export function orderMethods(store: any){
                     )
                 })
             )
+        ),
+        getMyOrders: rxMethod<void>(
+            pipe(
+                tap(() => patchState(store, {loading: true})),
+                switchMap(() => {
+                    return orderService.getOrders().pipe(
+                        tapResponse({
+                            next: (res) => {
+                                let lastorder = res.orders[0];
+                                
+                                const orderList = lastorder.items.map((item: any) => {
+                                    return{
+                                        ...item,
+                                        image: item.images[0],
+                                        status: lastorder.status,
+                                        updatedTime: lastorder.updatedAt
+                                    }
+                                });
+                                
+                                patchState(store, {orderItems: orderList})
+                                
+                            },
+                            error: (err) => {
+                                console.error(err);
+                            }
+                        }),
+                        finalize(() => patchState(store, { loading: false })),
+                    )
+                })
+            )
         )
     }
 }

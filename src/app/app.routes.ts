@@ -29,5 +29,9 @@ export const routes: Routes = [
     {
         path: 'order-success',
         loadComponent: () => import('./pages/order-success/order-success')
+    },
+    {
+        path: 'orders',
+        loadComponent: () => import('./pages/view-order/view-order')
     }
 ];

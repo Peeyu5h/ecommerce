@@ -16,4 +16,9 @@ export class OrderApi {
     const url = `${environment.apiUrl}${this.orderUrl}`;
     return this.http.post( url, {});
   }
+
+  getOrders(): Observable<any>{
+    const url = `${environment.apiUrl}${this.orderUrl}`;
+    return this.http.get( url );
+  }
 }

@@ -1,0 +1,12 @@
+<div class="mx-auto max-w-[1200px] py-6 px-4">
+    <app-back-button class="mb-6" navigateTo="/products/all">Continue Shopping</app-back-button>
+    <h1 class="text-3xl font-extrabold mb-4">My Orders</h1>
+
+    @for (item of store.orderItems(); track item.product) {
+    <div appViewPanel class=" mb-4 relative bg-white cursor-pointer rounded-xl shadow-lg overflow-hidden flex flex-col h-full transition-all duration-200 ease-out hover:-translate-y-1 hover: shadow-xl">
+        <div class="flex flex-col gap-6">
+            <app-show-order-items [item]="item" />
+        </div>
+    </div>
+    }
+</div>
