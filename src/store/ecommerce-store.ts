@@ -18,6 +18,7 @@ import { Category } from "../app/models/category";
 import { categoryMethods } from "./category-method";
 import { cartMethods } from "./cart-method";
 import { wishListMethods } from "./wishList-method";
+import { orderMethods } from "./order-method";
 
 
 export type EcommerceState = {
@@ -85,6 +86,7 @@ export const EcommerceStore = signalStore(
     withMethods(categoryMethods),
     withMethods(cartMethods),
     withMethods(wishListMethods),
+    withMethods(orderMethods),
 
     withMethods((
         store, toaster = inject(Toaster), 
@@ -246,6 +248,11 @@ export const EcommerceStore = signalStore(
           if(!user) {
             toaster.error('Please login before placing order');
             patchState(store, {loading: false})
+            return;
+          }
+
+          if(store.isLoggedIn()){
+            store.createOrder();
             return;
           }
 
