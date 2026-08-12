@@ -8,7 +8,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { SignInDialog } from "../app/components/sign-in-dialog/sign-in-dialog";
 import { User } from "../app/models/user";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Order } from "../app/models/order";
+import { Order, orderItem } from "../app/models/order";
 import { withStorageSync } from "@angular-architects/ngrx-toolkit";
 import { AddReviewParams, UserReview } from "../app/models/user-review";
 import { AuthApi } from "../app/services/auth-api";
@@ -18,6 +18,7 @@ import { Category } from "../app/models/category";
 import { categoryMethods } from "./category-method";
 import { cartMethods } from "./cart-method";
 import { wishListMethods } from "./wishList-method";
+import { orderMethods } from "./order-method";
 
 
 export type EcommerceState = {
@@ -33,6 +34,7 @@ export type EcommerceState = {
     toggleSideNav: boolean;
     categoriesList: Category[];
     isLoggedIn: boolean;
+    orderItems: orderItem[];
 }
 
 export const EcommerceStore = signalStore(
@@ -52,6 +54,7 @@ export const EcommerceStore = signalStore(
         toggleSideNav: false,
         categoriesList: [],
         isLoggedIn: false,
+        orderItems: []
     } as EcommerceState),
 
     // withStorageSync({
@@ -85,6 +88,7 @@ export const EcommerceStore = signalStore(
     withMethods(categoryMethods),
     withMethods(cartMethods),
     withMethods(wishListMethods),
+    withMethods(orderMethods),
 
     withMethods((
         store, toaster = inject(Toaster), 
@@ -249,13 +253,18 @@ export const EcommerceStore = signalStore(
             return;
           }
 
-          const order: Order = {
-            id: crypto.randomUUID(),
-            userId: user.id,
-            total: Math.round(store.cartItems().reduce((acc, item) => acc + item.quantity * item.product.price, 0)),
-            items: store.cartItems(),
-            paymentStatus: 'success'
-          };
+          if(store.isLoggedIn()){
+            store.createOrder();
+            return;
+          }
+
+          // const order: Order = {
+          //   id: crypto.randomUUID(),
+          //   userId: user.id,
+          //   total: Math.round(store.cartItems().reduce((acc, item) => acc + item.quantity * item.product.price, 0)),
+          //   items: store.cartItems(),
+          //   paymentStatus: 'success'
+          // };
 
           await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -319,6 +328,7 @@ export const EcommerceStore = signalStore(
           if (store.isLoggedIn()) {
             store.getCartItems();
             store.getWishListItems();
+            store.getMyOrders();
           }
         });
         

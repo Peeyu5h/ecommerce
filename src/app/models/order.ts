@@ -1,9 +1,20 @@
-import { CartItem } from "./cart";
+export type orderItem = {
+    product: string;
+    name: string;
+    priceAtPurchase: number;
+    image: string;
+    quantity: number;
+    itemTotal: number;
+    id: string;
+    //
+    status: string;
+    updatedTime: Date;
+}
 
 export type Order = {
-    id: string;
+    _id: string;
     userId: string;
-    total: number;
-    items: CartItem[];
-    paymentStatus: 'success' | 'failure';
+    items: [orderItem];
+    totalAmount: number;
+    status: string
 };
